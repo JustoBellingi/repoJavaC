@@ -1,46 +1,46 @@
-package src.com.techlab.main;
+package com.techlab.main;
 
-import src.com.techlab.productos.*;
-import src.com.techlab.pedidos.*;
-import src.com.techlab.service.*;
-import src.com.techlab.excepciones.*;
+import com.techlab.productos.*;
+import com.techlab.pedidos.*;
+import com.techlab.service.*;
+import com.techlab.excepciones.*;
 
 import java.util.Scanner;
 
-public class main {
+public class Main {
 
     public static void main(String[] args) {
 
         Scanner sc = new Scanner(System.in);
+
         ProductoService ps = new ProductoService();
         PedidoService pedS = new PedidoService();
 
         int opcion;
 
         do {
-            System.out.println("\n=== FERRETERÍA DON TITO =====");
-            System.out.println("1. Agregar producto");
+            System.out.println("\n1. Agregar producto");
             System.out.println("2. Listar productos");
-            System.out.println("3. Buscar producto");
-            System.out.println("4. Eliminar producto");
-            System.out.println("5. Crear pedido");
-            System.out.println("6. Listar pedidos");
+            System.out.println("3. Eliminar producto");
+            System.out.println("4. Crear pedido");
+            System.out.println("5. Listar pedidos");
             System.out.println("0. Salir");
 
-            try {
-                opcion = Integer.parseInt(sc.nextLine());
+            opcion = sc.nextInt();
 
+            try {
                 switch (opcion) {
 
                     case 1:
+                        sc.nextLine();
                         System.out.print("Nombre: ");
                         String nombre = sc.nextLine();
 
                         System.out.print("Precio: ");
-                        double precio = Double.parseDouble(sc.nextLine());
+                        double precio = sc.nextDouble();
 
                         System.out.print("Stock: ");
-                        int stock = Integer.parseInt(sc.nextLine());
+                        int stock = sc.nextInt();
 
                         ps.agregarProducto(new Producto(nombre, precio, stock));
                         break;
@@ -50,68 +50,53 @@ public class main {
                         break;
 
                     case 3:
-                        System.out.print("ID: ");
-                        int idBuscar = Integer.parseInt(sc.nextLine());
-
-                        Producto p = ps.buscarPorId(idBuscar);
-
-                        if (p != null) {
-                            System.out.println(p);
-                        } else {
-                            System.out.println("No encontrado");
-                        }
+                        System.out.print("ID a eliminar: ");
+                        int id = sc.nextInt();
+                        ps.eliminarProducto(id);
                         break;
 
                     case 4:
-                        System.out.print("ID a eliminar: ");
-                        int idEliminar = Integer.parseInt(sc.nextLine());
-                        ps.eliminarProducto(idEliminar);
-                        break;
-
-                    case 5:
                         Pedido pedido = new Pedido();
 
-                        while (true) {
-                            ps.listarProductos();
+                        System.out.print("Cantidad de productos: ");
+                        int cant = sc.nextInt();
+
+                        for (int i = 0; i < cant; i++) {
 
                             System.out.print("ID producto: ");
-                            int idProd = Integer.parseInt(sc.nextLine());
+                            int idProd = sc.nextInt();
 
-                            if (idProd == 0) break;
+                            Producto p = ps.buscarPorId(idProd);
 
-                            Producto prod = ps.buscarPorId(idProd);
-
-                            if (prod == null) {
-                                System.out.println("No existe");
+                            if (p == null) {
+                                System.out.println("Producto no encontrado");
+                                i--; 
                                 continue;
                             }
 
                             System.out.print("Cantidad: ");
-                            int cant = Integer.parseInt(sc.nextLine());
+                            int cantidad = sc.nextInt();
 
-                            if (cant > prod.getStock()) {
-                                throw new StockInsuficienteException("No hay suficiente stock");
+                            if (p.getStock() < cantidad) {
+                                throw new StockInsuficienteException("No hay stock suficiente");
                             }
 
-                            prod.setStock(prod.getStock() - cant);
-                            pedido.agregarLinea(new LineaPedido(prod, cant));
+                            p.setStock(p.getStock() - cantidad);
+
+                            pedido.agregarLinea(new LineaPedido(p, cantidad));
                         }
 
-                        pedS.agregarPedido(pedido);
-                        System.out.println("Pedido creado!");
+                            pedS.agregarPedido(pedido);
+                            System.out.println("Pedido creado correctamente");
                         break;
 
-                    case 6:
+                    case 5:
                         pedS.listarPedidos();
                         break;
                 }
 
-            } catch (NumberFormatException e) {
-                System.out.println("Error: ingresaste un valor inválido.");
-                opcion = -1;
             } catch (StockInsuficienteException e) {
-                System.out.println("Error: " + e.getMessage());
-                opcion = -1;
+                System.out.println(e.getMessage());
             }
 
         } while (opcion != 0);

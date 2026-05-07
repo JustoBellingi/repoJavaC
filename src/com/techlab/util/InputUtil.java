@@ -1,4 +1,4 @@
-package src.com.techlab.util;
+package com.techlab.util;
 
 import java.util.Scanner;
 

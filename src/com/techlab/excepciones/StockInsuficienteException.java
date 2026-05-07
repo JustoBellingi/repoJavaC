@@ -1,4 +1,4 @@
-package src.com.techlab.excepciones;
+package com.techlab.excepciones;
 
 public class StockInsuficienteException extends Exception {
 

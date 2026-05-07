@@ -1,22 +1,20 @@
-package src.com.techlab.service;
+package com.techlab.service;
 
-import src.com.techlab.productos.Producto;
+import com.techlab.productos.Producto;
 import java.util.ArrayList;
-import java.util.List;
 
 public class ProductoService {
-    private List<Producto> productos = new ArrayList<>();
+
+    private ArrayList<Producto> productos = new ArrayList<>();
 
     public void agregarProducto(Producto p) {
         productos.add(p);
     }
 
     public void listarProductos() {
-        if (productos.isEmpty()) {
-            System.out.println("No hay productos.");
-            return;
+        for (Producto p : productos) {
+            System.out.println(p);
         }
-        productos.forEach(System.out::println);
     }
 
     public Producto buscarPorId(int id) {
@@ -28,9 +26,5 @@ public class ProductoService {
 
     public void eliminarProducto(int id) {
         productos.removeIf(p -> p.getId() == id);
-    }
-
-    public List<Producto> getProductos() {
-        return productos;
     }
 }

@@ -1,6 +1,7 @@
-package src.com.techlab.productos;
+package com.techlab.productos;
 
 public class Producto {
+
     private static int contador = 1;
 
     private int id;
@@ -16,26 +17,15 @@ public class Producto {
     }
 
     public int getId() { return id; }
-
     public String getNombre() { return nombre; }
-
     public double getPrecio() { return precio; }
-
-    public void setPrecio(double precio) {
-        if (precio >= 0) this.precio = precio;
-    }
-
     public int getStock() { return stock; }
 
-    public void setStock(int stock) {
-        if (stock >= 0) this.stock = stock;
-    }
+    public void setPrecio(double precio) { this.precio = precio; }
+    public void setStock(int stock) { this.stock = stock; }
 
     @Override
     public String toString() {
-        return "ID: " + id +
-                " | " + nombre +
-                " | $" + precio +
-                " | Stock: " + stock;
+        return id + " - " + nombre + " | $" + precio + " | Stock: " + stock;
     }
 }

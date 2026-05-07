@@ -1,38 +1,36 @@
-package src.com.techlab.pedidos;
+package com.techlab.pedidos;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class Pedido {
+
     private static int contador = 1;
 
     private int id;
-    private List<LineaPedido> lineas;
+    private ArrayList<LineaPedido> lineas;
 
     public Pedido() {
         this.id = contador++;
         this.lineas = new ArrayList<>();
     }
 
-    public void agregarLinea(LineaPedido linea) {
-        lineas.add(linea);
+    public void agregarLinea(LineaPedido lp) {
+        lineas.add(lp);
     }
 
     public double calcularTotal() {
         double total = 0;
-        for (LineaPedido l : lineas) {
-            total += l.calcularSubtotal();
+        for (LineaPedido lp : lineas) {
+            total += lp.calcularSubtotal();
         }
         return total;
     }
 
-    public void mostrarDetalle() {
-        System.out.println("\nPedido ID: " + id);
-        for (LineaPedido l : lineas) {
-            System.out.println(l.getProducto().getNombre() +
-                    " x" + l.getCantidad() +
-                    " = $" + l.calcularSubtotal());
+    public void mostrar() {
+        System.out.println("Pedido #" + id);
+        for (LineaPedido lp : lineas) {
+            System.out.println("- " + lp.getProducto().getNombre() + " x" + lp.getCantidad());
         }
-        System.out.println("TOTAL: $" + calcularTotal());
+        System.out.println("Total: $" + calcularTotal());
     }
 }

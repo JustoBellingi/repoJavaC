@@ -1,8 +1,9 @@
-package src.com.techlab.pedidos;
+package com.techlab.pedidos;
 
-import src.com.techlab.productos.Producto;
+import com.techlab.productos.Producto;
 
 public class LineaPedido {
+
     private Producto producto;
     private int cantidad;
 
@@ -16,6 +17,5 @@ public class LineaPedido {
     }
 
     public Producto getProducto() { return producto; }
-
     public int getCantidad() { return cantidad; }
 }
