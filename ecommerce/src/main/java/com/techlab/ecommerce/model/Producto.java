@@ -1,4 +1,4 @@
-package com.techlab.model;
+package com.techlab.ecommerce.model;
 
 import jakarta.persistence.*;
 
@@ -85,4 +85,3 @@ public class Producto {
         this.stock = stock;
     }
 }
-

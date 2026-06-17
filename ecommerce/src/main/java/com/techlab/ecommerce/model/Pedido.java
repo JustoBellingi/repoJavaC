@@ -1,19 +1,23 @@
-package com.techlab.model;
+package com.techlab.ecommerce.model;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 
+@Entity
 public class Pedido {
 
-    private static int contador = 1;
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private LocalDate fecha;
     private String estado;
     private ArrayList<LineaPedido> lineas; 
 
     public Pedido() {
-        this.id = contador++;
         this.fecha = LocalDate.now();
         this.estado = "Pendiente";
         this.lineas = new ArrayList<>();

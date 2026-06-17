@@ -1,4 +1,4 @@
-package com.techlab.controller;
+package com.techlab.ecommerce.controller;
 
 public class CategoriaController {
     

@@ -1,8 +1,8 @@
-package com.techlab.service;
+package com.techlab.ecommerce.service;
 
 import java.util.ArrayList;
 
-import com.techlab.model.Producto;
+import com.techlab.ecommerce.model.Producto;
 
 public class ProductoService {
 
