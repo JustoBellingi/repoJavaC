@@ -1,73 +1,67 @@
 package com.techlab.ecommerce.controller;
 
-import java.util.List;
-
-import org.springframework.http.ResponseEntity;
+import com.techlab.ecommerce.model.Producto;
+import com.techlab.ecommerce.repository.ProductoRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import com.techlab.ecommerce.model.Producto;
-import com.techlab.ecommerce.service.ProductoService;
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/productos")
 public class ProductoController {
 
-    private final ProductoService productoService;
+    private final ProductoRepository productoRepository;
 
-    public ProductoController(ProductoService productoService) {
-        this.productoService = productoService;
+    public ProductoController(ProductoRepository productoRepository) {
+        this.productoRepository = productoRepository;
     }
 
-    // Listar productos
+    // GET todos los productos
     @GetMapping
-    public List<Producto> listarProductos() {
-        return productoService.listarProductos();
+    public List<Producto> getAll() {
+        return productoRepository.findAll();
     }
 
-    // Buscar producto 
+    // GET por ID
     @GetMapping("/{id}")
-    public ResponseEntity<Producto> buscarPorId(@PathVariable Integer id) {
-
-        Producto producto = productoService.buscarPorId(id);
-
-        if (producto != null) {
-            return ResponseEntity.ok(producto);
-        }
-
-        return ResponseEntity.notFound().build();
+    public Producto getById(@PathVariable Integer id) {
+        return productoRepository.findById(id)
+                .orElse(null);
     }
 
-    // Agregar 
+    // POST crear producto
     @PostMapping
-    public Producto agregarProducto(@RequestBody Producto producto) {
-        return productoService.agregarProducto(producto);
+    public Producto create(@RequestBody Producto producto) {
+        return productoRepository.save(producto);
     }
 
-    // Actualizar 
+    // PUT actualizar producto
     @PutMapping("/{id}")
-    public ResponseEntity<Producto> actualizarProducto(
-            @PathVariable Integer id,
-            @RequestBody Producto producto) {
+    public Producto update(@PathVariable Integer id, @RequestBody Producto nuevo) {
 
-        Producto actualizado = productoService.actualizarProducto(id, producto);
+        Optional<Producto> optional = productoRepository.findById(id);
 
-        if (actualizado != null) {
-            return ResponseEntity.ok(actualizado);
+        if (optional.isEmpty()) {
+            return null;
         }
 
-        return ResponseEntity.notFound().build();
+        Producto producto = optional.get();
+
+        producto.setNombre(nuevo.getNombre());
+        producto.setDescripcion(nuevo.getDescripcion());
+        producto.setPrecio(nuevo.getPrecio());
+        producto.setStock(nuevo.getStock());
+        producto.setImagen(nuevo.getImagen());
+        producto.setCategoria(nuevo.getCategoria());
+
+        return productoRepository.save(producto);
     }
 
-    // Eliminar 
+    // DELETE producto
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> eliminarProducto(@PathVariable Integer id) {
-
-        boolean eliminado = productoService.eliminarProducto(id);
-
-        if (eliminado) {
-            return ResponseEntity.ok("Producto eliminado correctamente.");
-        }
-
-        return ResponseEntity.notFound().build();
+    public void delete(@PathVariable Integer id) {
+        productoRepository.deleteById(id);
     }
 }
