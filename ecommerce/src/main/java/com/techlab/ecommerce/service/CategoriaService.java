@@ -1,36 +1,40 @@
 package com.techlab.ecommerce.service;
 
-import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.stereotype.Service;
 
 import com.techlab.ecommerce.model.Categoria;
+import com.techlab.ecommerce.repository.CategoriaRepository;
 
+@Service
 public class CategoriaService {
 
-    private ArrayList<Categoria> categorias;
+    private final CategoriaRepository categoriaRepository;
 
-    public CategoriaService() {
-        categorias = new ArrayList<>();
+    public CategoriaService(CategoriaRepository categoriaRepository) {
+        this.categoriaRepository = categoriaRepository;
     }
 
-    public void agregarCategoria(Categoria categoria) {
-        categorias.add(categoria);
+    public Categoria crear(Categoria categoria) {
+        return categoriaRepository.save(categoria);
     }
 
-    public void listarCategorias() {
+    public List<Categoria> listar() {
+        return categoriaRepository.findAll();
+    }
 
-        if(categorias.isEmpty()){
+    public Categoria buscarPorId(Integer id) {
+        Optional<Categoria> cat = categoriaRepository.findById(id);
+        return cat.orElse(null);
+    }
 
-            System.out.println("No hay categorias registradas.");
-            return;
-
+    public boolean eliminar(Integer id) {
+        if (categoriaRepository.existsById(id)) {
+            categoriaRepository.deleteById(id);
+            return true;
         }
-
-        for(Categoria categoria : categorias){
-
-            System.out.println(categoria);
-
-        }
-
+        return false;
     }
-
 }

@@ -1,102 +1,65 @@
 package com.techlab.ecommerce.service;
 
-import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.techlab.ecommerce.model.Producto;
+import com.techlab.ecommerce.repository.ProductoRepository;
 
+@Service
 public class ProductoService {
 
-    private ArrayList<Producto> productos;
+    @Autowired
+    private ProductoRepository productoRepository;
 
-    public ProductoService() {
-        productos = new ArrayList<>();
+    // Agregar producto
+    public Producto agregarProducto(Producto producto) {
+        return productoRepository.save(producto);
     }
 
-    public void agregarProducto(Producto producto) {
-        productos.add(producto);
+    // Listar productos
+    public List<Producto> listarProductos() {
+        return productoRepository.findAll();
     }
 
-    public void listarProductos() {
-
-        if (productos.isEmpty()) {
-            System.out.println("No hay productos registrados.");
-            return;
-        }
-
-        for (Producto producto : productos) {
-            System.out.println(producto);
-        }
+    // Buscar por ID
+    public Producto buscarPorId(Integer id) {
+        Optional<Producto> producto = productoRepository.findById(id);
+        return producto.orElse(null);
     }
 
-    public Producto buscarPorId(int id) {
-
-        for (Producto producto : productos) {
-
-            if (producto.getId() == id) {
-                return producto;
-            }
-
-        }
-
-        return null;
-    }
-
-    public Producto buscarPorNombre(String nombre) {
-
-        for (Producto producto : productos) {
-
-            if (producto.getNombre().equalsIgnoreCase(nombre)) {
-                return producto;
-            }
-
-        }
-
-        return null;
-    }
-
-    public void actualizarProducto(int id, double precio, int stock) {
-
-    Producto producto = buscarPorId(id);
-
-    if (producto != null) {
-
-        if (precio < 0 || stock < 0) {
-            System.out.println("Precio o stock inválido.");
-            return;
-        }
-
-        producto.setPrecio(precio);
-        producto.setStock(stock);
-
-        System.out.println("Producto actualizado.");
-
-    } else {
-
-        System.out.println("Producto no encontrado.");
-
-    }
-
-}
-
-    public void eliminarProducto(int id) {
+    // Actualizar 
+    public Producto actualizarProducto(Integer id, Producto datosProducto) {
 
         Producto producto = buscarPorId(id);
 
         if (producto != null) {
+            producto.setNombre(datosProducto.getNombre());
+            producto.setDescripcion(datosProducto.getDescripcion());
+            producto.setPrecio(datosProducto.getPrecio());
+            producto.setCategoria(datosProducto.getCategoria());
+            producto.setImagen(datosProducto.getImagen());
+            producto.setStock(datosProducto.getStock());
 
-            productos.remove(producto);
-            System.out.println("Producto eliminado");
-
-        } else {
-
-            System.out.println("Producto no encontrado.");
-
+            return productoRepository.save(producto);
         }
 
+        return null;
     }
 
-    public ArrayList<Producto> getProductos() {
-        return productos;
-    }
+    // Eliminar 
+    public boolean eliminarProducto(Integer id) {
 
+        Producto producto = buscarPorId(id);
+
+        if (producto != null) {
+            productoRepository.deleteById(id);
+            return true;
+        }
+
+        return false;
+    }
 }

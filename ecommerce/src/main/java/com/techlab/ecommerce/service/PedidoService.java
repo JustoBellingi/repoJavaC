@@ -1,66 +1,52 @@
 package com.techlab.ecommerce.service;
 
-import java.util.ArrayList;
+import java.util.List;
 
+import org.springframework.stereotype.Service;
+
+import com.techlab.ecommerce.excepcion.StockInsuficienteException;
+import com.techlab.ecommerce.model.LineaPedido;
 import com.techlab.ecommerce.model.Pedido;
+import com.techlab.ecommerce.model.Producto;
+import com.techlab.ecommerce.repository.PedidoRepository;
+import com.techlab.ecommerce.repository.ProductoRepository;
 
+@Service
 public class PedidoService {
 
-    private ArrayList<Pedido> pedidos;
+    private final PedidoRepository pedidoRepository;
+    private final ProductoRepository productoRepository;
 
-    public PedidoService() {
-        pedidos = new ArrayList<>();
+    public PedidoService(PedidoRepository pedidoRepository, ProductoRepository productoRepository) {
+        this.pedidoRepository = pedidoRepository;
+        this.productoRepository = productoRepository;
     }
 
-    public void agregarPedido(Pedido pedido) {
-        pedidos.add(pedido);
-    }
+    public Pedido crearPedido(Pedido pedido) throws StockInsuficienteException {
 
-    public void listarPedidos() {
+        for (LineaPedido linea : pedido.getLineas()) {
 
-        if (pedidos.isEmpty()) {
-            System.out.println("No hay pedidos registrados.");
-            return;
-        }
+            Producto producto = productoRepository.findById(linea.getProducto().getId())
+                    .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
 
-        for (Pedido pedido : pedidos) {
-            pedido.mostrar();
-        }
-
-    }
-
-    public Pedido buscarPorId(int id) {
-
-        for (Pedido pedido : pedidos) {
-
-            if (pedido.getId() == id) {
-                return pedido;
+            if (producto.getStock() < linea.getCantidad()) {
+                throw new StockInsuficienteException("Stock insuficiente para: " + producto.getNombre());
             }
 
+            producto.setStock(producto.getStock() - linea.getCantidad());
+            productoRepository.save(producto);
+
+            linea.setProducto(producto);
         }
 
-        return null;
+        return pedidoRepository.save(pedido);
     }
 
-    public void cambiarEstado(int id, String estado) {
-
-        Pedido pedido = buscarPorId(id);
-
-        if (pedido != null) {
-
-            pedido.setEstado(estado);
-            System.out.println("Estado actualizado correctamente.");
-
-        } else {
-
-            System.out.println("Pedido no encontrado.");
-
-        }
-
+    public List<Pedido> listar() {
+        return pedidoRepository.findAll();
     }
 
-    public ArrayList<Pedido> getPedidos() {
-        return pedidos;
+    public Pedido buscarPorId(Integer id) {
+        return pedidoRepository.findById(id).orElse(null);
     }
-
 }

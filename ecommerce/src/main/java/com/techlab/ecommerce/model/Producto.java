@@ -13,14 +13,17 @@ public class Producto {
     private String nombre;
     private String descripcion;
     private double precio;
-    private String categoria;
     private String imagen;
     private int stock;
+
+    @ManyToOne
+    @JoinColumn(name = "categoria_id")
+    private Categoria categoria;
 
     public Producto() {
     }
 
-    public Producto(String nombre, String descripcion, double precio, String categoria, String imagen, int stock) {
+    public Producto(String nombre, String descripcion, double precio, Categoria categoria, String imagen, int stock) {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.precio = precio;
@@ -61,11 +64,11 @@ public class Producto {
         this.precio = precio;
     }
 
-    public String getCategoria() {
+    public Categoria getCategoria() {
         return categoria;
     }
 
-    public void setCategoria(String categoria) {
+    public void setCategoria(Categoria categoria) {
         this.categoria = categoria;
     }
 
@@ -83,5 +86,18 @@ public class Producto {
 
     public void setStock(int stock) {
         this.stock = stock;
+    }
+
+    @Override
+    public String toString() {
+        return "Producto{" +
+                "id=" + id +
+                ", nombre='" + nombre + '\'' +
+                ", descripcion='" + descripcion + '\'' +
+                ", precio=" + precio +
+                ", categoria=" + (categoria != null ? categoria.getNombre() : "Sin categoría") +
+                ", imagen='" + imagen + '\'' +
+                ", stock=" + stock +
+                '}';
     }
 }
