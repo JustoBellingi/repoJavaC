@@ -1,52 +1,31 @@
 package com.techlab.ecommerce.service;
 
-import java.util.List;
-
+import com.techlab.ecommerce.model.Pedido;
+import com.techlab.ecommerce.repository.PedidoRepository;
 import org.springframework.stereotype.Service;
 
-import com.techlab.ecommerce.excepcion.StockInsuficienteException;
-import com.techlab.ecommerce.model.LineaPedido;
-import com.techlab.ecommerce.model.Pedido;
-import com.techlab.ecommerce.model.Producto;
-import com.techlab.ecommerce.repository.PedidoRepository;
-import com.techlab.ecommerce.repository.ProductoRepository;
+import java.util.List;
 
 @Service
 public class PedidoService {
 
-    private final PedidoRepository pedidoRepository;
-    private final ProductoRepository productoRepository;
+    private final PedidoRepository repo;
 
-    public PedidoService(PedidoRepository pedidoRepository, ProductoRepository productoRepository) {
-        this.pedidoRepository = pedidoRepository;
-        this.productoRepository = productoRepository;
+    public PedidoService(PedidoRepository repo) {
+        this.repo = repo;
     }
 
-    public Pedido crearPedido(Pedido pedido) throws StockInsuficienteException {
-
-        for (LineaPedido linea : pedido.getLineas()) {
-
-            Producto producto = productoRepository.findById(linea.getProducto().getId())
-                    .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
-
-            if (producto.getStock() < linea.getCantidad()) {
-                throw new StockInsuficienteException("Stock insuficiente para: " + producto.getNombre());
-            }
-
-            producto.setStock(producto.getStock() - linea.getCantidad());
-            productoRepository.save(producto);
-
-            linea.setProducto(producto);
-        }
-
-        return pedidoRepository.save(pedido);
+    public List<Pedido> findAll() {
+        return repo.findAll();
     }
 
-    public List<Pedido> listar() {
-        return pedidoRepository.findAll();
+    public Pedido save(Pedido pedido) {
+        pedido.setEstado("Pendiente");
+        return repo.save(pedido);
     }
 
-    public Pedido buscarPorId(Integer id) {
-        return pedidoRepository.findById(id).orElse(null);
+    public Pedido findById(int id) {
+        return repo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Pedido no encontrado"));
     }
 }

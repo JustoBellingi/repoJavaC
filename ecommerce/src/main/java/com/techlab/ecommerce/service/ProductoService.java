@@ -1,65 +1,47 @@
 package com.techlab.ecommerce.service;
 
-import java.util.List;
-import java.util.Optional;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.techlab.ecommerce.model.Producto;
 import com.techlab.ecommerce.repository.ProductoRepository;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class ProductoService {
 
-    @Autowired
-    private ProductoRepository productoRepository;
+    private final ProductoRepository repo;
 
-    // Agregar producto
-    public Producto agregarProducto(Producto producto) {
-        return productoRepository.save(producto);
+    public ProductoService(ProductoRepository repo) {
+        this.repo = repo;
     }
 
-    // Listar productos
-    public List<Producto> listarProductos() {
-        return productoRepository.findAll();
+    public List<Producto> findAll() {
+        return repo.findAll();
     }
 
-    // Buscar por ID
-    public Producto buscarPorId(Integer id) {
-        Optional<Producto> producto = productoRepository.findById(id);
-        return producto.orElse(null);
+    public Producto findById(int id) {
+        return repo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
     }
 
-    // Actualizar 
-    public Producto actualizarProducto(Integer id, Producto datosProducto) {
-
-        Producto producto = buscarPorId(id);
-
-        if (producto != null) {
-            producto.setNombre(datosProducto.getNombre());
-            producto.setDescripcion(datosProducto.getDescripcion());
-            producto.setPrecio(datosProducto.getPrecio());
-            producto.setCategoria(datosProducto.getCategoria());
-            producto.setImagen(datosProducto.getImagen());
-            producto.setStock(datosProducto.getStock());
-
-            return productoRepository.save(producto);
-        }
-
-        return null;
+    public Producto save(Producto producto) {
+        return repo.save(producto);
     }
 
-    // Eliminar 
-    public boolean eliminarProducto(Integer id) {
+    public Producto update(int id, Producto nuevo) {
+        Producto p = findById(id);
 
-        Producto producto = buscarPorId(id);
+        p.setNombre(nuevo.getNombre());
+        p.setDescripcion(nuevo.getDescripcion());
+        p.setPrecio(nuevo.getPrecio());
+        p.setStock(nuevo.getStock());
+        p.setImagen(nuevo.getImagen());
+        p.setCategoria(nuevo.getCategoria());
 
-        if (producto != null) {
-            productoRepository.deleteById(id);
-            return true;
-        }
+        return repo.save(p);
+    }
 
-        return false;
+    public void delete(int id) {
+        repo.deleteById(id);
     }
 }

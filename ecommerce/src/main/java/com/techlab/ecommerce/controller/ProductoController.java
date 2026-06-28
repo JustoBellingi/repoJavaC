@@ -1,67 +1,43 @@
 package com.techlab.ecommerce.controller;
 
 import com.techlab.ecommerce.model.Producto;
-import com.techlab.ecommerce.repository.ProductoRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.techlab.ecommerce.service.ProductoService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/productos")
 public class ProductoController {
 
-    private final ProductoRepository productoRepository;
+    private final ProductoService productoService;
 
-    public ProductoController(ProductoRepository productoRepository) {
-        this.productoRepository = productoRepository;
+    public ProductoController(ProductoService productoService) {
+        this.productoService = productoService;
     }
 
-    // GET todos los productos
     @GetMapping
-    public List<Producto> getAll() {
-        return productoRepository.findAll();
+    public List<Producto> listar() {
+        return productoService.findAll();
     }
 
-    // GET por ID
     @GetMapping("/{id}")
-    public Producto getById(@PathVariable Integer id) {
-        return productoRepository.findById(id)
-                .orElse(null);
+    public Producto obtenerPorId(@PathVariable int id) {
+        return productoService.findById(id);
     }
 
-    // POST crear producto
     @PostMapping
-    public Producto create(@RequestBody Producto producto) {
-        return productoRepository.save(producto);
+    public Producto crear(@RequestBody Producto producto) {
+        return productoService.save(producto);
     }
 
-    // PUT actualizar producto
     @PutMapping("/{id}")
-    public Producto update(@PathVariable Integer id, @RequestBody Producto nuevo) {
-
-        Optional<Producto> optional = productoRepository.findById(id);
-
-        if (optional.isEmpty()) {
-            return null;
-        }
-
-        Producto producto = optional.get();
-
-        producto.setNombre(nuevo.getNombre());
-        producto.setDescripcion(nuevo.getDescripcion());
-        producto.setPrecio(nuevo.getPrecio());
-        producto.setStock(nuevo.getStock());
-        producto.setImagen(nuevo.getImagen());
-        producto.setCategoria(nuevo.getCategoria());
-
-        return productoRepository.save(producto);
+    public Producto actualizar(@PathVariable int id, @RequestBody Producto producto) {
+        return productoService.update(id, producto);
     }
 
-    // DELETE producto
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Integer id) {
-        productoRepository.deleteById(id);
+    public void eliminar(@PathVariable int id) {
+        productoService.delete(id);
     }
 }
