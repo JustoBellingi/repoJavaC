@@ -1,6 +1,7 @@
 package com.techlab.ecommerce.model;
 
 import jakarta.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "categorias")
@@ -12,8 +13,10 @@ public class Categoria {
 
     private String nombre;
 
-    public Categoria() {
-    }
+    @OneToMany(mappedBy = "categoria")
+    private List<Producto> productos;
+
+    public Categoria() {}
 
     public Categoria(String nombre) {
         this.nombre = nombre;
@@ -23,12 +26,12 @@ public class Categoria {
         return id;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
     public String getNombre() {
         return nombre;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public void setNombre(String nombre) {

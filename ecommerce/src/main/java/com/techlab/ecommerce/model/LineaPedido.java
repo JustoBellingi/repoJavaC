@@ -15,8 +15,7 @@ public class LineaPedido {
 
     private int cantidad;
 
-    public LineaPedido() {
-    }
+    public LineaPedido() {}
 
     public LineaPedido(Producto producto, int cantidad) {
         this.producto = producto;
@@ -27,20 +26,20 @@ public class LineaPedido {
         return id;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
     public Producto getProducto() {
         return producto;
     }
 
-    public void setProducto(Producto producto) {
-        this.producto = producto;
-    }
-
     public int getCantidad() {
         return cantidad;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public void setProducto(Producto producto) {
+        this.producto = producto;
     }
 
     public void setCantidad(int cantidad) {

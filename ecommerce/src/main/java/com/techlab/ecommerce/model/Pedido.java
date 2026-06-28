@@ -1,26 +1,28 @@
 package com.techlab.ecommerce.model;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 
+import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 
 @Entity
+@Table(name = "pedidos")
 public class Pedido {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
     private LocalDate fecha;
     private String estado;
-    private ArrayList<LineaPedido> lineas; 
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "pedido_id")
+    private List<LineaPedido> lineas = new ArrayList<>();
 
     public Pedido() {
         this.fecha = LocalDate.now();
         this.estado = "Pendiente";
-        this.lineas = new ArrayList<>();
     }
 
     public void agregarLinea(LineaPedido linea) {
@@ -28,7 +30,6 @@ public class Pedido {
     }
 
     public double calcularTotal() {
-
         double total = 0;
 
         for (LineaPedido linea : lineas) {
@@ -50,7 +51,7 @@ public class Pedido {
         return estado;
     }
 
-    public ArrayList<LineaPedido> getLineas() {
+    public List<LineaPedido> getLineas() {
         return lineas;
     }
 
@@ -61,26 +62,4 @@ public class Pedido {
     public void setFecha(LocalDate fecha) {
         this.fecha = fecha;
     }
-
-    public void mostrar() {
-        System.out.println("Pedido N° " + id);
-        System.out.println("Fecha: " + fecha);
-        System.out.println("Estado: " + estado);
-        
-        for (LineaPedido linea : lineas) {
-
-            System.out.println(
-                    linea.getProducto().getNombre()
-                    + " x "
-                    + linea.getCantidad()
-                    + " = $"
-                    + linea.calcularSubtotal()
-            );
-
-        }
-
-        System.out.println("TOTAL: $" + calcularTotal());
-
-    }
-
 }
