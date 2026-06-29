@@ -1,6 +1,5 @@
 package com.techlab.ecommerce.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 @Entity
@@ -12,26 +11,30 @@ public class Producto {
     private Integer id;
 
     private String nombre;
+
+    @Column(columnDefinition = "TEXT")
     private String descripcion;
+
     private double precio;
+
     private String imagen;
+
     private int stock;
 
     @ManyToOne
     @JoinColumn(name = "categoria_id")
-    @JsonIgnoreProperties("productos")
     private Categoria categoria;
 
-    public Producto() {
-    }
+    public Producto() {}
 
-    public Producto(String nombre, String descripcion, double precio, Categoria categoria, String imagen, int stock) {
+    public Producto(String nombre, String descripcion, double precio,
+                    String imagen, int stock, Categoria categoria) {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.precio = precio;
-        this.categoria = categoria;
         this.imagen = imagen;
         this.stock = stock;
+        this.categoria = categoria;
     }
 
     public Integer getId() {
@@ -88,18 +91,5 @@ public class Producto {
 
     public void setCategoria(Categoria categoria) {
         this.categoria = categoria;
-    }
-
-    @Override
-    public String toString() {
-        return "Producto{" +
-                "id=" + id +
-                ", nombre='" + nombre + '\'' +
-                ", descripcion='" + descripcion + '\'' +
-                ", precio=" + precio +
-                ", categoria=" + (categoria != null ? categoria.getNombre() : "Sin categoría") +
-                ", imagen='" + imagen + '\'' +
-                ", stock=" + stock +
-                '}';
     }
 }

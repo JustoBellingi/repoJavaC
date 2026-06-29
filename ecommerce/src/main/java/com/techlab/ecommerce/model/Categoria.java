@@ -16,11 +16,10 @@ public class Categoria {
     private String nombre;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "categoria", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "categoria")
     private List<Producto> productos;
 
-    public Categoria() {
-    }
+    public Categoria() {}
 
     public Categoria(String nombre) {
         this.nombre = nombre;
