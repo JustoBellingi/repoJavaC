@@ -32,7 +32,6 @@ public class PedidoService {
 
     public Pedido save(Pedido pedido) throws StockInsuficienteException {
 
-        // VALIDAR STOCK
         for (LineaPedido linea : pedido.getLineas()) {
 
             Producto producto = productoRepo.findById(linea.getProducto().getId())
@@ -44,11 +43,9 @@ public class PedidoService {
                 );
             }
 
-            // DESCONTAR STOCK
             producto.setStock(producto.getStock() - linea.getCantidad());
             productoRepo.save(producto);
 
-            // actualizar referencia real
             linea.setProducto(producto);
         }
 

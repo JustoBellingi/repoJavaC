@@ -31,11 +31,9 @@ public class Pedido {
 
     public double calcularTotal() {
         double total = 0;
-
         for (LineaPedido linea : lineas) {
             total += linea.calcularSubtotal();
         }
-
         return total;
     }
 

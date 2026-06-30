@@ -1,12 +1,10 @@
 package com.techlab.ecommerce.service;
 
-import java.util.List;
-import java.util.Optional;
-
-import org.springframework.stereotype.Service;
-
 import com.techlab.ecommerce.model.Categoria;
 import com.techlab.ecommerce.repository.CategoriaRepository;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class CategoriaService {
@@ -17,24 +15,37 @@ public class CategoriaService {
         this.categoriaRepository = categoriaRepository;
     }
 
-    public Categoria crear(Categoria categoria) {
-        return categoriaRepository.save(categoria);
-    }
-
     public List<Categoria> listar() {
         return categoriaRepository.findAll();
     }
 
     public Categoria buscarPorId(Integer id) {
-        Optional<Categoria> cat = categoriaRepository.findById(id);
-        return cat.orElse(null);
+        return categoriaRepository.findById(id).orElse(null);
+    }
+
+    public Categoria crear(Categoria categoria) {
+        return categoriaRepository.save(categoria);
+    }
+
+    public Categoria actualizar(Integer id, Categoria categoriaNueva) {
+
+        Categoria categoria = buscarPorId(id);
+
+        if (categoria != null) {
+            categoria.setNombre(categoriaNueva.getNombre());
+            return categoriaRepository.save(categoria);
+        }
+
+        return null;
     }
 
     public boolean eliminar(Integer id) {
+
         if (categoriaRepository.existsById(id)) {
             categoriaRepository.deleteById(id);
             return true;
         }
+
         return false;
     }
 }

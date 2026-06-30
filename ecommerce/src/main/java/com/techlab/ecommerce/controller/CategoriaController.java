@@ -1,7 +1,7 @@
 package com.techlab.ecommerce.controller;
 
 import com.techlab.ecommerce.model.Categoria;
-import com.techlab.ecommerce.repository.CategoriaRepository;
+import com.techlab.ecommerce.service.CategoriaService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -10,45 +10,35 @@ import java.util.List;
 @RequestMapping("/api/categorias")
 public class CategoriaController {
 
-    private final CategoriaRepository repo;
+    private final CategoriaService service;
 
-    public CategoriaController(CategoriaRepository repo) {
-        this.repo = repo;
+    public CategoriaController(CategoriaService service) {
+        this.service = service;
     }
 
     @GetMapping
     public List<Categoria> listar() {
-        return repo.findAll();
+        return service.listar();
     }
 
     @GetMapping("/{id}")
     public Categoria buscarPorId(@PathVariable Integer id) {
-        return repo.findById(id).orElse(null);
+        return service.buscarPorId(id);
     }
 
     @PostMapping
     public Categoria crear(@RequestBody Categoria categoria) {
-        return repo.save(categoria);
+        return service.crear(categoria);
     }
 
     @PutMapping("/{id}")
-    public Categoria actualizar(@PathVariable Integer id, @RequestBody Categoria categoriaNueva) {
-
-        Categoria categoria = repo.findById(id).orElse(null);
-
-        if (categoria != null) {
-            categoria.setNombre(categoriaNueva.getNombre());
-            return repo.save(categoria);
-        }
-
-        return null;
+    public Categoria actualizar(@PathVariable Integer id,
+                                @RequestBody Categoria categoria) {
+        return service.actualizar(id, categoria);
     }
 
     @DeleteMapping("/{id}")
-    public String eliminar(@PathVariable Integer id) {
-
-        repo.deleteById(id);
-
-        return "Categoría eliminada";
+    public boolean eliminar(@PathVariable Integer id) {
+        return service.eliminar(id);
     }
 }

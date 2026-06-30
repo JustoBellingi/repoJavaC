@@ -34,10 +34,6 @@ public class LineaPedido {
         return cantidad;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
     public void setProducto(Producto producto) {
         this.producto = producto;
     }
