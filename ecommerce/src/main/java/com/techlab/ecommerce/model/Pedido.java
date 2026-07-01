@@ -1,6 +1,8 @@
 package com.techlab.ecommerce.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,53 +13,60 @@ public class Pedido {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
     private LocalDate fecha;
+
+    private Double total;
+
     private String estado;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "pedido_id")
+    @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<LineaPedido> lineas = new ArrayList<>();
 
     public Pedido() {
         this.fecha = LocalDate.now();
-        this.estado = "Pendiente";
+        this.estado = "PENDIENTE";
     }
 
-    public void agregarLinea(LineaPedido linea) {
-        lineas.add(linea);
-    }
-
-    public double calcularTotal() {
-        double total = 0;
-        for (LineaPedido linea : lineas) {
-            total += linea.calcularSubtotal();
-        }
-        return total;
-    }
-
-    public int getId() {
+    public Integer getId() {
         return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public LocalDate getFecha() {
         return fecha;
     }
 
-    public String getEstado() {
-        return estado;
+    public void setFecha(LocalDate fecha) {
+        this.fecha = fecha;
     }
 
-    public List<LineaPedido> getLineas() {
-        return lineas;
+    public Double getTotal() {
+        return total;
+    }
+
+    public void setTotal(Double total) {
+        this.total = total;
+    }
+
+    public String getEstado() {
+        return estado;
     }
 
     public void setEstado(String estado) {
         this.estado = estado;
     }
 
-    public void setFecha(LocalDate fecha) {
-        this.fecha = fecha;
+    public List<LineaPedido> getLineas() {
+        return lineas;
+    }
+
+    public void setLineas(List<LineaPedido> lineas) {
+        this.lineas = lineas;
     }
 }

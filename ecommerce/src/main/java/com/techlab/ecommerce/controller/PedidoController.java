@@ -1,7 +1,7 @@
 package com.techlab.ecommerce.controller;
 
-import com.techlab.ecommerce.excepcion.StockInsuficienteException;
 import com.techlab.ecommerce.model.Pedido;
+import com.techlab.ecommerce.repository.PedidoRepository;
 import com.techlab.ecommerce.service.PedidoService;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,29 +11,32 @@ import java.util.List;
 @RequestMapping("/api/pedidos")
 public class PedidoController {
 
-    private final PedidoService service;
+    private final PedidoRepository pedidoRepository;
+    private final PedidoService pedidoService;
 
-    public PedidoController(PedidoService service) {
-        this.service = service;
+    public PedidoController(PedidoRepository pedidoRepository,
+                            PedidoService pedidoService) {
+
+        this.pedidoRepository = pedidoRepository;
+        this.pedidoService = pedidoService;
     }
 
     @GetMapping
-    public List<Pedido> listar() {
-        return service.findAll();
+    public List<Pedido> listar(){
+
+        return pedidoRepository.findAll();
     }
 
     @GetMapping("/{id}")
-    public Pedido buscar(@PathVariable int id) {
-        return service.findById(id);
+    public Pedido buscar(@PathVariable Integer id){
+
+        return pedidoRepository.findById(id).orElse(null);
     }
 
     @PostMapping
-    public Pedido crear(@RequestBody Pedido pedido) throws StockInsuficienteException {
-        return service.save(pedido);
+    public Pedido crear(@RequestBody Pedido pedido){
+
+        return pedidoService.crearPedido(pedido);
     }
 
-    @ExceptionHandler(StockInsuficienteException.class)
-    public String handleStock(StockInsuficienteException ex) {
-        return ex.getMessage();
-    }
 }

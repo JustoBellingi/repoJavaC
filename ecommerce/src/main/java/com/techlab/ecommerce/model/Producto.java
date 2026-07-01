@@ -1,6 +1,9 @@
 package com.techlab.ecommerce.model;
 
 import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 
 @Entity
 @Table(name = "productos")
@@ -15,11 +18,11 @@ public class Producto {
     @Column(columnDefinition = "TEXT")
     private String descripcion;
 
-    private double precio;
+    private Double precio;
 
     private String imagen;
 
-    private int stock;
+    private Integer stock;
 
     @ManyToOne
     @JoinColumn(name = "categoria_id")
@@ -27,8 +30,8 @@ public class Producto {
 
     public Producto() {}
 
-    public Producto(String nombre, String descripcion, double precio,
-                    String imagen, int stock, Categoria categoria) {
+    public Producto(String nombre, String descripcion, Double precio,
+                    String imagen, Integer stock, Categoria categoria) {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.precio = precio;
@@ -61,11 +64,11 @@ public class Producto {
         this.descripcion = descripcion;
     }
 
-    public double getPrecio() {
+    public Double getPrecio() {
         return precio;
     }
 
-    public void setPrecio(double precio) {
+    public void setPrecio(Double precio) {
         this.precio = precio;
     }
 
@@ -77,11 +80,11 @@ public class Producto {
         this.imagen = imagen;
     }
 
-    public int getStock() {
+    public Integer getStock() {
         return stock;
     }
 
-    public void setStock(int stock) {
+    public void setStock(Integer stock) {
         this.stock = stock;
     }
 

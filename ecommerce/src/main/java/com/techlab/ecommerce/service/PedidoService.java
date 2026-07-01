@@ -1,6 +1,5 @@
 package com.techlab.ecommerce.service;
 
-import com.techlab.ecommerce.excepcion.StockInsuficienteException;
 import com.techlab.ecommerce.model.LineaPedido;
 import com.techlab.ecommerce.model.Pedido;
 import com.techlab.ecommerce.model.Producto;
@@ -8,49 +7,35 @@ import com.techlab.ecommerce.repository.PedidoRepository;
 import com.techlab.ecommerce.repository.ProductoRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 public class PedidoService {
 
-    private final PedidoRepository pedidoRepo;
-    private final ProductoRepository productoRepo;
+    private final PedidoRepository pedidoRepository;
+    private final ProductoRepository productoRepository;
 
-    public PedidoService(PedidoRepository pedidoRepo, ProductoRepository productoRepo) {
-        this.pedidoRepo = pedidoRepo;
-        this.productoRepo = productoRepo;
+    public PedidoService(PedidoRepository pedidoRepository,
+                         ProductoRepository productoRepository) {
+        this.pedidoRepository = pedidoRepository;
+        this.productoRepository = productoRepository;
     }
 
-    public List<Pedido> findAll() {
-        return pedidoRepo.findAll();
-    }
+    public Pedido crearPedido(Pedido pedido) {
 
-    public Pedido findById(int id) {
-        return pedidoRepo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Pedido no encontrado"));
-    }
-
-    public Pedido save(Pedido pedido) throws StockInsuficienteException {
+        Double total = 0.0;
 
         for (LineaPedido linea : pedido.getLineas()) {
 
-            Producto producto = productoRepo.findById(linea.getProducto().getId())
+            Producto producto = productoRepository
+                    .findById(linea.getProducto().getId())
                     .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
-
-            if (producto.getStock() < linea.getCantidad()) {
-                throw new StockInsuficienteException(
-                        "Stock insuficiente para: " + producto.getNombre()
-                );
-            }
-
-            producto.setStock(producto.getStock() - linea.getCantidad());
-            productoRepo.save(producto);
-
             linea.setProducto(producto);
+            linea.setPedido(pedido);
+
+            Double precioLinea = producto.getPrecio() * linea.getCantidad();
+            linea.setPrecio(precioLinea);
+            total += precioLinea;
         }
-
-        pedido.setEstado("Confirmado");
-
-        return pedidoRepo.save(pedido);
+        pedido.setTotal(total);
+        return pedidoRepository.save(pedido);
     }
 }
