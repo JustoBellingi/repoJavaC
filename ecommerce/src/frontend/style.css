@@ -9,9 +9,6 @@ body {
   background: #eef2f7;
 }
 
-/* =========================
-   NAVBAR
-========================= */
 .navbar {
   display: flex;
   justify-content: space-between;
@@ -27,9 +24,6 @@ body {
   border-radius: 20px;
 }
 
-/* =========================
-   LAYOUT
-========================= */
 .container {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -37,9 +31,6 @@ body {
   padding: 20px;
 }
 
-/* =========================
-   SECCIONES
-========================= */
 .section {
   background: white;
   padding: 15px;
@@ -51,9 +42,6 @@ body {
   margin-bottom: 10px;
 }
 
-/* =========================
-   PRODUCTOS
-========================= */
 .producto {
   width: 180px;
   display: inline-block;
@@ -88,9 +76,6 @@ body {
   cursor: pointer;
 }
 
-/* =========================
-   CARRITO (FLOAT)
-========================= */
 .cart-float {
   position: fixed;
   top: 80px;
@@ -105,13 +90,11 @@ body {
   padding: 15px;
 }
 
-/* ITEMS CARRITO */
 .carrito-item {
   border-bottom: 1px solid #eee;
   padding: 10px 0;
 }
 
-/* BOTONES CARRITO */
 .carrito-item button {
   margin: 3px;
   padding: 5px 8px;
@@ -123,7 +106,6 @@ body {
 .btn-restar { background: #ffc107; }
 .btn-eliminar { background: #dc3545; color: white; }
 
-/* BOTÓN CONFIRMAR */
 .btn-confirmar {
   width: 100%;
   margin-top: 10px;
@@ -134,16 +116,12 @@ body {
   border-radius: 8px;
 }
 
-/* TOTAL */
 .total {
   margin-top: 10px;
   font-size: 18px;
   font-weight: bold;
 }
 
-/* =========================
-   PEDIDOS (HISTORIAL)
-========================= */
 .pedido-card {
   background: white;
   border-radius: 10px;
