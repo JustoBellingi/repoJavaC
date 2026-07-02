@@ -196,34 +196,25 @@ function cargarPedidos() {
       const cont = document.getElementById("pedidos");
       cont.innerHTML = "";
 
-      if (data.length === 0) {
-        cont.innerHTML = "<p>No hay pedidos aún</p>";
-        return;
-      }
-
       data.forEach(p => {
         cont.innerHTML += `
           <div class="pedido-card">
-            <h3>Pedido #${p.id}</h3>
-            <p> Fecha: ${p.fecha}</p>
+            <h3> Pedido #${p.id}</h3>
+            <p>${p.fecha}</p>
             <p> Estado: ${p.estado}</p>
             <p> Total: $${p.total}</p>
 
-            <details>
-              <summary>Ver productos</summary>
-              <ul>
-                ${p.lineas.map(l => `
-                  <li>
-                    Producto ID: ${l.producto?.id} |
-                    Cantidad: ${l.cantidad} |
-                    Precio: $${l.precio}
-                  </li>
-                `).join("")}
-              </ul>
-            </details>
+            <div class="pedido-items">
+              ${p.lineas.map(l => `
+                <div class="pedido-item">
+                  🛍️ ${l.producto?.nombre || "Producto"} |
+                  x${l.cantidad} |
+                  $${l.precio}
+                </div>
+              `).join("")}
+            </div>
           </div>
         `;
       });
-    })
-    .catch(err => console.log("Error pedidos:", err));
+    })    .catch(err => console.log("Error pedidos:", err));
 }
