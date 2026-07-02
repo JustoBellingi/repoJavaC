@@ -6,7 +6,7 @@ import com.techlab.ecommerce.service.PedidoService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/pedidos")
 public class PedidoController {

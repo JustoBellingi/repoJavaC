@@ -1,0 +1,155 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial;
+}
+
+body {
+  background: #eef2f7;
+}
+
+/* NAVBAR */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #111;
+  color: white;
+  padding: 15px 20px;
+}
+
+.cart-info {
+  background: #2d6cdf;
+  padding: 8px 12px;
+  border-radius: 20px;
+}
+
+/* LAYOUT */
+.container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  padding: 20px;
+}
+
+/* SECCIONES */
+.section {
+  background: white;
+  padding: 15px;
+  border-radius: 12px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+}
+
+.section h2 {
+  margin-bottom: 10px;
+}
+
+/* PRODUCTOS */
+.producto {
+  border: 1px solid #eee;
+  padding: 12px;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  transition: 0.2s;
+}
+
+.producto:hover {
+  transform: scale(1.02);
+}
+
+.producto button {
+  margin-top: 8px;
+  padding: 8px;
+  border: none;
+  background: #2d6cdf;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* CARRITO */
+.carrito-item {
+  border: 1px solid #ddd;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  background: #fafafa;
+}
+
+.carrito-item button {
+  margin: 3px;
+  padding: 5px 8px;
+  border-radius: 5px;
+  border: none;
+}
+
+/* BOTONES */
+.btn-sumar { background: #28a745; color: white; }
+.btn-restar { background: #ffc107; }
+.btn-eliminar { background: #dc3545; color: white; }
+
+.btn-confirmar {
+  width: 100%;
+  margin-top: 10px;
+  padding: 10px;
+  background: black;
+  color: white;
+  border: none;
+  border-radius: 8px;
+}
+
+/* TOTAL */
+.total {
+  margin-top: 10px;
+  font-size: 18px;
+  font-weight: bold;
+}
+.cart-float {
+  position: fixed;
+  top: 80px;
+  right: 20px;
+  width: 320px;
+  max-height: 80vh;
+  overflow-y: auto;
+
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  padding: 15px;
+}
+
+.carrito-item {
+  border-bottom: 1px solid #eee;
+  padding: 10px 0;
+}
+
+.btn-confirmar {
+  width: 100%;
+  margin-top: 10px;
+}
+
+.producto img {
+  width: 100%;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.producto {
+  width: 180px;
+  display: inline-block;
+  margin: 10px;
+  vertical-align: top;
+}
+
+.pedido-card {
+  border: 1px solid #ddd;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  background: #fafafa;
+}
+
+.pedido-card h3 {
+  margin-bottom: 5px;
+}
